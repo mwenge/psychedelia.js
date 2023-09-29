@@ -1,7 +1,21 @@
 <!doctype html>
 <head> 
+<style>
+.container {
+  display:grid;
+  grid-template-columns: repeat(20,5%);
+}
+</style>
 </head> 
 <body> 
-<canvas id="canvas" width=300 height=150></canvas>
+  <div class="container" id="container"></div>
 </body>
+<script src="patterns.js"></script>
 <script src="psychedelia.js"></script>
+<script>
+  for (var i=0; i<55; i++) {
+    const canvas = document.createElement("canvas");
+    psychedelia(canvas);
+    setTimeout(() => {container.appendChild(canvas)}, 1000);
+  }
+</script>
