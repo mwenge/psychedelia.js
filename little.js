@@ -23,12 +23,12 @@ function createCanvas() {
   return {canvas: canvas, updateCanvas: updateCanvas};
 }
 
-function littlePsychedelias() {
-  for (var i=0; i<185; i++) {
+function littlePsychedelias(num) {
+  for (var i=0; i<num; i++) {
     let c = createCanvas();
     psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, c.updateCanvas);
     setTimeout(() => {container.appendChild(c.canvas)}, 1000);
   }
 }
 
-littlePsychedelias();
+littlePsychedelias(180);

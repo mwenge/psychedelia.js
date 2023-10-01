@@ -1,0 +1,31 @@
+
+body {
+  background-color: black;
+}
+.container {
+  width: 30%;
+  display:grid;
+  grid-template-columns: repeat(10,8%);
+  grid-gap: 1px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+.dom-container {
+  display:grid;
+  grid-template-columns: repeat(40,20px);
+  grid-gap: 1px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+.pixel {
+  width: 20px;
+  height: 20px;
+}

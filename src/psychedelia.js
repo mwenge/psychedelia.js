@@ -24,6 +24,11 @@ export function psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, updatePixel) {
 
   let pixel_matrix = new Array(NUM_COLS * NUM_ROWS).fill(0);
 
+  function updateXPos(x) {
+    cursorXPosition = x;
+    console.log(cursorXPosition);
+  }
+
   function reinitializeSequences() {
     for (var i = 0; i < ARRAY_SIZE; i++) {
       pixelXPositionArray[i] = 0;
@@ -222,4 +227,6 @@ export function psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, updatePixel) {
   }
 
   LaunchPsychedelia();
+
+  return { updateXPos: updateXPos};
 }
