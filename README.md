@@ -5,6 +5,7 @@ A subset of [Psychedelia](https://github.com/mwenge/psychedelia) ported to Javas
 Specifically this is an adaption in Javascript of the version of Psychedelia
 that appeared as a type-in listing in 'Popular Computing Magazine' in December
 1984:
+
 <img height=360 src="https://github.com/mwenge/psychedelia-listing/raw/master/listing/PopularComputing_Weekly_Issue_1984-12-13_0031.jpg">
 
 Like all type-in listings of its day this consisted of a small BASIC program
@@ -102,54 +103,54 @@ And this is what `PaintPixel` looks like when we port it from assembly to Javasc
 6502 Assembly Language                                 Javascript
 ;-----------------------                               -------------
 PaintPixel                                             function paintPixel(pixelXPos, pixelYPos, colorIndexForCurrentPixel) {                              
-	LDA pixelXPosition                                     if (pixelXPos < 0) {
-	AND #$80 ; Detect if has moved off left of screen        return;
-	BNE ReturnEarly                                        }
+  LDA pixelXPosition                                     if (pixelXPos < 0) {
+  AND #$80 ; Detect if has moved off left of screen        return;
+  BNE ReturnEarly                                        }
 
-	LDA pixelXPosition                                     if (pixelXPos >= NUM_COLS) {
-	CMP #NUM_COLS                                            return;
-	BPL ReturnEarly                                        }
+  LDA pixelXPosition                                     if (pixelXPos >= NUM_COLS) {
+  CMP #NUM_COLS                                            return;
+  BPL ReturnEarly                                        }
 
-	LDA pixelYPosition                                     if (pixelYPos < 0) {
-	AND #$80 ; Detect if has moved off top of screen.        return;
-	BNE ReturnEarly                                        }
+  LDA pixelYPosition                                     if (pixelYPos < 0) {
+  AND #$80 ; Detect if has moved off top of screen.        return;
+  BNE ReturnEarly                                        }
 
-	LDA pixelYPosition                                     if (pixelYPos >= NUM_ROWS) {
-	CMP #NUM_ROWS                                            return;
-	BPL ReturnEarly                                        }
-																																																																													
-	JSR LoadXAndYPosition                                  const x = (pixelYPos * NUM_COLS) + pixelXPos;
+  LDA pixelYPosition                                     if (pixelYPos >= NUM_ROWS) {
+  CMP #NUM_ROWS                                            return;
+  BPL ReturnEarly                                        }
+                                                                                                                                                          
+  JSR LoadXAndYPosition                                  const x = (pixelYPos * NUM_COLS) + pixelXPos;
 
-	; Y now contains the pixelXPosition                    const currentColorForPixel = pixel_matrix[x] & COLOR_MAX;
-	LDA (currentLineForPixelInColorRamLoPtr),Y              
-	; Make sure the color we get is addressable by         
-	; presetColorValuesArray.                               
-	AND #COLOR_MAX                                         
-																																																																													
-	LDX #$00                                               const indexOfCurrentColor = presetColorValuesArray.indexOf(currentColorForPixel);
+  ; Y now contains the pixelXPosition                    const currentColorForPixel = pixel_matrix[x] & COLOR_MAX;
+  LDA (currentLineForPixelInColorRamLoPtr),Y              
+  ; Make sure the color we get is addressable by         
+  ; presetColorValuesArray.                               
+  AND #COLOR_MAX                                         
+                                                                                                                                                          
+  LDX #$00                                               const indexOfCurrentColor = presetColorValuesArray.indexOf(currentColorForPixel);
 b408C
-	CMP presetColorValuesArray,X                                                                                                                           
-	BEQ b4096                                              
-	INX                                                    
-	CPX #COLOR_MAX + 1                                     
-	BNE b408C                                              
-																												 
+  CMP presetColorValuesArray,X                                                                                                                           
+  BEQ b4096                                              
+  INX                                                    
+  CPX #COLOR_MAX + 1                                     
+  BNE b408C                                              
+                                                         
 b4096
-	TXA                                                    let cx = colorIndexForCurrentPixel + 1;
-	STA indexOfCurrentColor                                                                                                                                 
-	LDX colorIndexForCurrentPixel                          if (cx < indexOfCurrentColor) {
-	INX                                                      return;
-	CPX indexOfCurrentColor                                }                                                                                                
-	BEQ ActuallyPaintPixel                                                                                                                                 
-	BPL ActuallyPaintPixel                                 
-	RTS                                                    
-																												 
+  TXA                                                    let cx = colorIndexForCurrentPixel + 1;
+  STA indexOfCurrentColor                                                                                                                                 
+  LDX colorIndexForCurrentPixel                          if (cx < indexOfCurrentColor) {
+  INX                                                      return;
+  CPX indexOfCurrentColor                                }                                                                                                
+  BEQ ActuallyPaintPixel                                                                                                                                 
+  BPL ActuallyPaintPixel                                 
+  RTS                                                    
+                                                         
 ActuallyPaintPixel                                             
-	LDX colorIndexForCurrentPixel                          const newColor = presetColorValuesArray[colorIndexForCurrentPixel];
-	LDA presetColorValuesArray,X                           
-	STA (currentLineForPixelInColorRamLoPtr),Y             pixel_matrix[x] = newColor;
-	RTS                                                    
+  LDX colorIndexForCurrentPixel                          const newColor = presetColorValuesArray[colorIndexForCurrentPixel];
+  LDA presetColorValuesArray,X                           
+  STA (currentLineForPixelInColorRamLoPtr),Y             pixel_matrix[x] = newColor;
+  RTS                                                    
                                                          const rgba = c.RGBs[newColor];
-																												 const o = ((pixelYPos * SCALE_FACTOR) * (NUM_COLS * SCALE_FACTOR)) + (pixelXPos * SCALE_FACTOR);
-																										 }
+                                                         const o = ((pixelYPos * SCALE_FACTOR) * (NUM_COLS * SCALE_FACTOR)) + (pixelXPos * SCALE_FACTOR);
+                                                     }
 ```
