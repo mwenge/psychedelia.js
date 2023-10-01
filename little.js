@@ -4,6 +4,9 @@ import * as c from './src/constants.js'
 const NUM_COLS = 0x28;
 const NUM_ROWS = 0x18;
 const SCALE_FACTOR = 1;
+const DEMO_MODE = true;
+
+const psys = littlePsychedelias(180);
 
 function createCanvas() {
   function updateCanvas(o, rgba, pixelXPos, pixelYPos) {
@@ -24,11 +27,12 @@ function createCanvas() {
 }
 
 function littlePsychedelias(num) {
+  const psys = [];
   for (var i=0; i<num; i++) {
     let c = createCanvas();
-    psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, c.updateCanvas);
+    psys.push(psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, c.updateCanvas, DEMO_MODE));
     setTimeout(() => {container.appendChild(c.canvas)}, 1000);
   }
+  return psys;
 }
 
-littlePsychedelias(180);

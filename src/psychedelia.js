@@ -1,12 +1,12 @@
 import {patterns} from "./patterns.js";
 import * as c from './constants.js'
 
-export function psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, updatePixel) {
+export function psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, updatePixel, DEMO_MODE = false) {
 
   const COLOR_MAX = 0x07;
   const MAX_INDEX_VALUE = 0x1F;
 
-  let cursorXPosition = 10;
+  let cursorXPosition = 20;
   let cursorYPosition = 10;
   let smoothingDelay = 0x0C;
   let currentXPosArray = patterns[0];
@@ -25,8 +25,23 @@ export function psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, updatePixel) {
   let pixel_matrix = new Array(NUM_COLS * NUM_ROWS).fill(0);
 
   function updateXPos(x) {
-    cursorXPosition = x;
-    console.log(cursorXPosition);
+    cursorXPosition += x;
+    if (cursorXPosition == NUM_COLS) {
+      cursorXPosition = 0;
+    }
+    if (cursorXPosition < 0) {
+      cursorXPosition = NUM_COLS;
+    }
+  }
+
+  function updateYPos(y) {
+    cursorYPosition += y;
+    if (cursorYPosition == NUM_ROWS) {
+      cursorYPosition = 0;
+    }
+    if (cursorYPosition < 0) {
+      cursorYPosition = NUM_ROWS;
+    }
   }
 
   function reinitializeSequences() {
@@ -174,10 +189,29 @@ export function psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, updatePixel) {
     window.requestAnimationFrame(MainPaintLoop);
   }
 
-  let indexIntoArrays = 0;
-  let randX = Math.floor(Math.random() * (1 - -1 + 1) + -1);
-  let randY = Math.floor(Math.random() * (1 - -1 + 1) + -1);
+  const oneOrZero = () => Math.floor(Math.random() * (1 - 0 + 1) + 0);
+  const oneZeroOrMinusOne = () => Math.floor(Math.random() * (1 - -1 + 1) + -1);
+  function nextRandomStep(cur) {
+    if (cur && oneOrZero()) return cur;
+    const next = oneZeroOrMinusOne();
+    return next;
+  }
 
+  let randInterval = 0;
+  let randX = 1, randY = 1;
+  function randomCursorUpdate() {
+    randInterval++;
+    if (randInterval % 30 == 0) {
+      randX = nextRandomStep(randX);
+    }
+    updateXPos(randX);
+    if (randInterval % 45 == 0) {
+      randY = nextRandomStep(randY);
+    }
+    updateYPos(randY);
+  }
+
+  let indexIntoArrays = 0;
   /*
    * Cycles through each of the first 32 bytes in the arrays.
    * Resets the array once it has cycle through all the colors.
@@ -195,28 +229,7 @@ export function psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, updatePixel) {
     initialFramesRemainingToNextPaintForStep[indexIntoArrays] = smoothingDelay;
     framesRemainingToNextPaintForStep[indexIntoArrays] = smoothingDelay;
 
-    if (indexIntoArrays % 10 == 0) {
-      randX = Math.floor(Math.random() * (1 - -1 + 1) + -1);
-    }
-    if (indexIntoArrays % 25 == 0) {
-      randY = Math.floor(Math.random() * (1 - -1 + 1) + -1);
-    }
-
-    cursorXPosition += randX;
-    if (cursorXPosition > NUM_COLS) {
-      cursorXPosition = 0;
-    }
-    if (cursorXPosition < 0) {
-      cursorXPosition = NUM_COLS;
-    }
-
-    cursorYPosition += randY;
-    if (cursorYPosition > NUM_ROWS) {
-      cursorYPosition = 0;
-    }
-    if (cursorYPosition < 0) {
-      cursorYPosition = NUM_ROWS;
-    }
+    if (DEMO_MODE) randomCursorUpdate();
   }
 
   function LaunchPsychedelia() {
@@ -228,5 +241,8 @@ export function psychedelia(NUM_COLS, NUM_ROWS, SCALE_FACTOR, updatePixel) {
 
   LaunchPsychedelia();
 
-  return { updateXPos: updateXPos};
+  return {
+    updateXPos: updateXPos,
+    updateYPos: updateYPos,
+  };
 }
