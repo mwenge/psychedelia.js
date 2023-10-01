@@ -2,15 +2,18 @@
 
 A subset of [Psychedelia](https://github.com/mwenge/psychedelia) ported to Javascript.
 
-Specifically this is an adaption in Javascript of the version of Psychedelia
+* [180 little Psychedelias running at once](https://mwenge.github.io/psychedelia.js/little.html)
+* [Psychedelia in Demo Mode](https://mwenge.github.io/psychedelia.js/)
+
+Specifically this is an adaptation in Javascript of the version of Psychedelia
 that appeared as a type-in listing in 'Popular Computing Magazine' in December
 1984:
 
-<img height=360 src="https://github.com/mwenge/psychedelia-listing/raw/master/listing/PopularComputing_Weekly_Issue_1984-12-13_0031.jpg">
+<img height=360 src="https://github.com/mwenge/psychedelia-listing/raw/master/listing/PopularComputing_Weekly_Issue_1984-12-13_0031.jpg"><img height=360 src="https://github.com/mwenge/psychedelia-listing/raw/master/listing/PopularComputing_Weekly_Issue_1984-12-13_0033.jpg">
 
 Like all type-in listings of its day this consisted of a small BASIC program
 that loads the raw machine code into memory. The juice of the program therefore
-is not in the short human-readable preamble at the start of the listing.
+is not in the short human-readable preamble at the start of the listing:
 
 ```basic
 10 REM *** A JEFF MINTER PRODUCTION ***
@@ -33,10 +36,10 @@ is not in the short human-readable preamble at the start of the listing.
 180 PRINT"DATA ERROR TRY AGAIN!"
 ```
 
-That just performs the mundane task of reading in all of the numbers in the
+This just performs the mundane task of reading in all of the numbers in the
 rest of the listing and, once done, executing those numbers as a machine code
 program. Rather what we're interested in is the assembly instructions that
-underlie that long list of numbers.
+underlie that long list of numbers. For example:
 
 To give you an idea of how we get from raw numbers to an assembly program in practice I'll show you how
 a little routine I call `PaintPixel` appears in the listing. Here it is:
@@ -154,3 +157,6 @@ ActuallyPaintPixel
                                                          const o = ((pixelYPos * SCALE_FACTOR) * (NUM_COLS * SCALE_FACTOR)) + (pixelXPos * SCALE_FACTOR);
                                                      }
 ```
+
+Take a look at [the rest of the code](src/psychedelia.js).
+
